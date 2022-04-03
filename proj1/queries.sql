@@ -67,3 +67,23 @@ JOIN docente_horas dh ON dh.sum_horas=mht.sum_horas AND dh.tipo=mht.tipo;
 
 DROP VIEW docente_horas;
 DROP VIEW max_horas_tipo;
+
+
+-- QUESTION 5 
+
+SELECT u.curso, o.ano_letivo, o.periodo, SUM(d.horas)
+FROM xucs u 
+JOIN xocorrencias o on u.codigo=o.codigo
+JOIN xtiposaula t on o.codigo=t.codigo and t.periodo= o.periodo and o.ano_letivo=t.ano_letivo
+JOIN xdsd d on d.id=t.id
+WHERE t.tipo='OT' AND (t.ano_letivo='2002/2003' OR t.ano_letivo='2003/2004')
+GROUP BY u.curso, o.ano_letivo, o.periodo;
+
+-- QUESTION 6
+
+SELECT COUNT(UNIQUE(t.tipo)) AS cursos,u.curso
+FROM xucs u
+JOIN xocorrencias o on u.codigo=o.codigo
+JOIN xtiposaula t on o.codigo=t.codigo and t.periodo= o.periodo and o.ano_letivo=t.ano_letivo
+GROUP BY u.curso
+HAVING COUNT(UNIQUE(t.tipo))=4;
