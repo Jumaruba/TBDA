@@ -81,9 +81,20 @@ GROUP BY u.curso, o.ano_letivo, o.periodo;
 
 -- QUESTION 6
 
+-- Calculates the number of types.
+SELECT UNIQUE(tipo) FROM xtiposaula;
+
+-- Get's the elements that have all the types. 
 SELECT COUNT(UNIQUE(t.tipo)) AS cursos,u.curso
 FROM xucs u
 JOIN xocorrencias o on u.codigo=o.codigo
 JOIN xtiposaula t on o.codigo=t.codigo and t.periodo= o.periodo and o.ano_letivo=t.ano_letivo
 GROUP BY u.curso
-HAVING COUNT(UNIQUE(t.tipo))=4;
+HAVING COUNT(UNIQUE(t.tipo))=5;
+
+-- Checking the result.
+SELECT UNIQUE(t.tipo)
+FROM xucs u
+JOIN xocorrencias o on u.codigo=o.codigo
+JOIN xtiposaula t on o.codigo=t.codigo and t.periodo= o.periodo and o.ano_letivo=t.ano_letivo
+WHERE u.curso=433;
