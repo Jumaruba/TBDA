@@ -1,70 +1,70 @@
--- Drop all tables 
-drop table xdocentes cascade constraints purge; 
-drop table xdsd cascade constraints purge; 
-drop table xocorrencias cascade constraints purge;
-drop table xtiposaula cascade constraints purge;
-drop table xucs cascade constraints purge; 
+-- DROP all tables 
+DROP TABLE xdocentes CASCADE CONSTRAINTS PRUGE; 
+DROP TABLE xdsd CASCADE CONSTRAINTS PRUGE; 
+DROP TABLE xocorrencias CASCADE CONSTRAINTS PRUGE;
+DROP TABLE xtiposaula CASCADE CONSTRAINTS PRUGE;
+DROP TABLE xucs CASCADE CONSTRAINTS PRUGE; 
 
-drop table ydocentes cascade constraints purge; 
-drop table ydsd cascade constraints purge; 
-drop table yocorrencias cascade constraints purge;
-drop table ytiposaula cascade constraints purge;
-drop table yucs cascade constraints purge; 
+DROP TABLE ydocentes CASCADE CONSTRAINTS PRUGE; 
+DROP TABLE ydsd CASCADE CONSTRAINTS PRUGE; 
+DROP TABLE yocorrencias CASCADE CONSTRAINTS PRUGE;
+DROP TABLE ytiposaula CASCADE CONSTRAINTS PRUGE;
+DROP TABLE yucs CASCADE CONSTRAINTS PRUGE; 
 
-drop table zdocentes cascade constraints purge; 
-drop table zdsd cascade constraints purge; 
-drop table zocorrencias cascade constraints purge;
-drop table ztiposaula cascade constraints purge;
-drop table zucs cascade constraints purge; 
+DROP TABLE zdocentes CASCADE CONSTRAINTS PRUGE; 
+DROP TABLE zdsd CASCADE CONSTRAINTS PRUGE; 
+DROP TABLE zocorrencias CASCADE CONSTRAINTS PRUGE;
+DROP TABLE ztiposaula CASCADE CONSTRAINTS PRUGE;
+DROP TABLE zucs CASCADE CONSTRAINTS PRUGE; 
 
 -- Create tables 
 
-create table xdocentes as select * from GTD10.xdocentes; 
-create table xdsd as select * from GTD10.xdsd; 
-create table xocorrencias as select * from GTD10.xocorrencias; 
-create table xtiposaula as select * from GTD10.xtiposaula; 
-create table xucs as select * from GTD10.xucs;
+create TABLE xdocentes AS SELECT * FROM GTD10.xdocentes; 
+create TABLE xdsd AS SELECT * FROM GTD10.xdsd; 
+create TABLE xocorrencias AS SELECT * FROM GTD10.xocorrencias; 
+create TABLE xtiposaula AS SELECT * FROM GTD10.xtiposaula; 
+create TABLE xucs AS SELECT * FROM GTD10.xucs;
 
 
-create table ydocentes as select * from GTD10.xdocentes; 
-create table ydsd as select * from GTD10.xdsd; 
-create table yocorrencias as select * from GTD10.xocorrencias; 
-create table ytiposaula as select * from GTD10.xtiposaula; 
-create table yucs as select * from GTD10.xucs; 
+create TABLE ydocentes AS SELECT * FROM GTD10.xdocentes; 
+create TABLE ydsd AS SELECT * FROM GTD10.xdsd; 
+create TABLE yocorrencias AS SELECT * FROM GTD10.xocorrencias; 
+create TABLE ytiposaula AS SELECT * FROM GTD10.xtiposaula; 
+create TABLE yucs AS SELECT * FROM GTD10.xucs; 
 
 
-create table zdocentes as select * from GTD10.xdocentes; 
-create table zdsd as select * from GTD10.xdsd; 
-create table zocorrencias as select * from GTD10.xocorrencias; 
-create table ztiposaula as select * from GTD10.xtiposaula; 
-create table zucs as select * from GTD10.xucs; 
+create TABLE zdocentes AS SELECT * FROM GTD10.xdocentes; 
+create TABLE zdsd AS SELECT * FROM GTD10.xdsd; 
+create TABLE zocorrencias AS SELECT * FROM GTD10.xocorrencias; 
+create TABLE ztiposaula AS SELECT * FROM GTD10.xtiposaula; 
+create TABLE zucs AS SELECT * FROM GTD10.xucs; 
 
 
 -- Add primary keys
-alter table ydocentes add constraint ydocentes_pk primary key (nr); 
-alter table ydsd add constraint ydsd_pk primary key (nr, id); 
-alter table ytiposaula add constraint ytiposaula_pk primary key (id); 
-alter table yocorrencias add constraint yocorrencias_pk primary key (codigo, ano_letivo, periodo);
-alter table yucs add constraint yucs_pk primary key(codigo); 
+alter TABLE ydocentes ADD CONSTRAINT ydocentes_pk PRIMARY KEY (nr); 
+alter TABLE ydsd ADD CONSTRAINT ydsd_pk PRIMARY KEY (nr, id); 
+alter TABLE ytiposaula ADD CONSTRAINT ytiposaula_pk PRIMARY KEY (id); 
+alter TABLE yocorrencias ADD CONSTRAINT yocorrencias_pk PRIMARY KEY (codigo, ano_letivo, periodo);
+alter TABLE yucs ADD CONSTRAINT yucs_pk PRIMARY KEY(codigo); 
 
-alter table zdocentes add constraint zdocentes_pk primary key (nr); 
-alter table zdsd add constraint zdsd_pk primary key (nr, id); 
-alter table ztiposaula add constraint ztiposaula_pk primary key (id); 
-alter table zocorrencias add constraint zocorrencias_pk primary key (codigo, ano_letivo, periodo);
-alter table zucs add constraint zucs_pk primary key(codigo); 
+alter TABLE zdocentes ADD CONSTRAINT zdocentes_pk PRIMARY KEY (nr); 
+alter TABLE zdsd ADD CONSTRAINT zdsd_pk PRIMARY KEY (nr, id); 
+alter TABLE ztiposaula ADD CONSTRAINT ztiposaula_pk PRIMARY KEY (id); 
+alter TABLE zocorrencias ADD CONSTRAINT zocorrencias_pk PRIMARY KEY (codigo, ano_letivo, periodo);
+alter TABLE zucs ADD CONSTRAINT zucs_pk PRIMARY KEY(codigo); 
 
 -- Add foreign keys 
-alter table ydsd add foreign key (nr) references ydocentes(nr); 
-alter table ydsd add foreign key (id) references ytiposaula(id); 
-alter table ytiposaula add foreign key (ano_letivo, periodo, codigo) 
-references yocorrencias(ano_letivo, periodo, codigo); 
-alter table yocorrencias add foreign key (codigo) references yucs(codigo);
+alter TABLE ydsd ADD FOREIGN KEY (nr) REFERENCES ydocentes(nr); 
+alter TABLE ydsd ADD FOREIGN KEY (id) REFERENCES ytiposaula(id); 
+alter TABLE ytiposaula ADD FOREIGN KEY (ano_letivo, periodo, codigo) 
+REFERENCES yocorrencias(ano_letivo, periodo, codigo); 
+alter TABLE yocorrencias ADD FOREIGN KEY (codigo) REFERENCES yucs(codigo);
 
-alter table zdsd add foreign key (nr) references zdocentes(nr); 
-alter table zdsd add foreign key (id) references ztiposaula(id); 
-alter table ztiposaula add foreign key (ano_letivo, periodo, codigo) 
-references zocorrencias(ano_letivo, periodo, codigo); 
-alter table zocorrencias add foreign key (codigo) references zucs(codigo);
+alter TABLE zdsd ADD FOREIGN KEY (nr) REFERENCES zdocentes(nr); 
+alter TABLE zdsd ADD FOREIGN KEY (id) REFERENCES ztiposaula(id); 
+alter TABLE ztiposaula ADD FOREIGN KEY (ano_letivo, periodo, codigo) 
+REFERENCES zocorrencias(ano_letivo, periodo, codigo); 
+alter TABLE zocorrencias ADD FOREIGN KEY (codigo) REFERENCES zucs(codigo);
 
 
 -- Create indexes 
