@@ -25,30 +25,29 @@ GROUP BY t.tipo;
 -- a) Use not in.
 SELECT UNIQUE(u.codigo)
 FROM xucs u 
-JOIN xocorrencias o ON u.codigo=o.codigo
+JOIN xocorrencias o ON u.codigo=o.codigo AND o.ano_letivo='2003/2004'
 WHERE u.codigo NOT IN (
-    SELECT o.codigo 
-    FROM xocorrencias o 
-    WHERE o.ano_letivo='2003/2004'
-); 
+    SELECT UNIQUE(codigo) FROM xtiposaula JOIN xdsd ON xdsd.id=xtiposaula.id WHERE ano_letivo='2003/2004'
+); --we need the join with the table xdsd because it is responsible for the teaching service distribution
 
 -- b) Use external join and is null.
+CREATE VIEW has_service AS
+SELECT UNIQUE(t.codigo)
+FROM xtiposaula t
+JOIN xdsd d ON d.id=t.id
+WHERE t.ano_letivo='2003/2004'; 
 
-CREATE VIEW occurrences AS 
-SELECT o.codigo 
-FROM xocorrencias o 
-WHERE o.ano_letivo='2003/2004'; 
+SELECT UNIQUE(u.codigo)
+FROM xucs u
+JOIN xocorrencias o ON o.codigo=u.codigo
+LEFT OUTER JOIN has_service hs ON u.codigo=hs.codigo
+WHERE hs.codigo IS NULL AND o.ano_letivo='2003/2004';
 
-SELECT UNIQUE(o.codigo)
-FROM xocorrencias ox
-FULL OUTER JOIN occurrences o ON o.codigo=ox.codigo;
-
-
-DROP VIEW occurrences;
+DROP VIEW has_service;
 
 -- QUESTION 4
 CREATE VIEW docente_horas AS 
-SELECT doc.nr, SUM(d.horas) as sum_horas, t.tipo, doc.nome
+SELECT doc.nr, SUM(d.horas*d.fator) as sum_horas, t.tipo, doc.nome
 FROM xdocentes doc
 JOIN xdsd d ON doc.nr=d.nr
 JOIN xtiposaula t ON d.id=t.id
