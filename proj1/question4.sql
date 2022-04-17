@@ -9,7 +9,7 @@ DROP VIEW max_horas_tipo;
 
 
 CREATE VIEW docente_horas AS 
-SELECT doc.nr, SUM(d.horas*d.fator*COALESCE(t.n_aulas, 1)) as sum_horas, t.tipo, doc.nome
+SELECT doc.nr, SUM(d.horas*d.fator) as sum_horas, t.tipo, doc.nome
 FROM xdocentes doc
 JOIN xdsd d ON doc.nr=d.nr
 JOIN xtiposaula t ON d.id=t.id
