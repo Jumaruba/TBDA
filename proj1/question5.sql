@@ -23,7 +23,6 @@ SELECT u.codigo, u.curso, o.ano_letivo, o.periodo, SUM(t.horas_turno * COALESCE(
 FROM yucs u 
 JOIN yocorrencias o ON u.codigo=o.codigo
 JOIN ytiposaula t ON o.codigo=t.codigo AND t.periodo= o.periodo and o.ano_letivo=t.ano_letivo
-JOIN ydsd d ON d.id=t.id
 WHERE t.tipo='OT' AND (t.ano_letivo='2002/2003' OR t.ano_letivo='2003/2004')
 GROUP BY u.curso, o.ano_letivo, o.periodo, u.codigo; 
 
@@ -34,6 +33,5 @@ SELECT u.codigo, u.curso, o.ano_letivo, o.periodo, SUM(t.horas_turno * COALESCE(
 FROM zucs u 
 JOIN zocorrencias o ON u.codigo=o.codigo
 JOIN ztiposaula t ON o.codigo=t.codigo AND t.periodo= o.periodo and o.ano_letivo=t.ano_letivo
-JOIN zdsd d ON d.id=t.id
 WHERE t.tipo='OT' AND (t.ano_letivo='2002/2003' OR t.ano_letivo='2003/2004')
 GROUP BY u.curso, o.ano_letivo, o.periodo, u.codigo; 
