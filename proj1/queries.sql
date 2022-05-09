@@ -22,6 +22,7 @@ GROUP BY t.tipo;
 
 -- QUESTIONS 3: Which courses (show the code) did have occurrences planned but did 
 -- not get service assigned in year 2003/2004?
+-- Does not have xdsd. 
 -- a) Use not in.
 SELECT UNIQUE(u.codigo)
 FROM xucs u 
