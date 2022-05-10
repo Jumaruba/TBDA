@@ -37,3 +37,52 @@ from gtd10.job_history jh
 inner join departments d on d.department_id = jh.department_id
 inner join employees e on e.employee_id = jh.employee_id 
 inner join jobs j on j.job_id = jh.job_id; 
+
+-- TODO: populate the many to many table. 
+
+insert into departments_employees (departments, employees)
+select ref(d), ref(e)
+-- ... 
+
+
+-- Add nested tables 
+update regions r 
+set r.countries_tab = cast(multiset(
+    select ref(c)
+    from countries c 
+    where c.region.region_id = r.region_id
+) as countries_tab_t); 
+
+
+update countries c 
+set c.locations_tab = cast(multiset(
+    select ref(l)
+    from locations l 
+    where l.countries.country_id = c.country_id
+) as locations_tab_t); 
+
+
+update locations l 
+set l.departments_tab = cast(multiset(
+    select ref(d) 
+    from departments d 
+    where d.locations.location_id = l.location_id
+) as departments_tab_t);  
+
+
+update jobs j
+set j.job_history_tab = 
+    cast(multiset(
+        select ref(jh) 
+        from job_history jh
+        where jh.jobs.job_id = j.job_id
+    ) as job_history_tab_t),
+j.employees_tab = cast(multiset(
+        select ref(e)
+        from employees e
+        where e.jobs.job_id = j.job_id
+    ) as employees_tab_t);
+
+-- TODO: populate departments 
+-- TODO: populate employees
+-- TODO: populate job_history

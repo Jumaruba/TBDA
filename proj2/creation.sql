@@ -50,7 +50,6 @@ create or replace type employees_t as object (
     hire_date DATE,
     salary NUMBER(8),
     commission_pct NUMBER(2),
-    department REF departments_t,
     jobs REF jobs_t,
     manager REF employees_t
 );
@@ -77,9 +76,15 @@ create or replace type departments_t as object (
     department_id NUMBER(4),
     department_name VARCHAR2(30),
     locations REF locations_t,
-    manager REF employees_t,
-    departments_employees REF departments_employees_t
+    manager REF employees_t
 );
+
+/
+-- many to many auxiliar table 
+create or replace type departments_employees_t as object ( 
+    departments_tab REF departments_t,
+    employees_tab REF employees_t
+); 
 /
 
 
@@ -94,25 +99,18 @@ create or replace type job_history_tab_t as table of ref job_history_t;
 /
 create or replace type employees_tab_t as table of ref employees_t; 
 / 
+create or replace type departments_employees_tab_t as table of ref departments_employees_t; 
+/
 
 -- Add the nested tables.
 alter type regions_t add attribute(countries_tab countries_tab_t) cascade; 
 alter type countries_t add attribute(locations_tab locations_tab_t) cascade;
 alter type locations_t add attribute(departments_tab departments_tab_t) cascade;
-alter type departments_t add attribute(job_history_tab job_history_tab_t) cascade;
+alter type departments_t add attribute(job_history_tab job_history_tab_t, departments_employees_tab departments_employees_tab_t) cascade;
 alter type jobs_t add attribute(job_history_tab job_history_tab_t, employees_tab employees_tab_t) cascade;
-alter type employees_t add attribute(employees_tab employees_tab_t, job_history_tab job_history_tab_t) cascade; 
-
+alter type employees_t add attribute(employees_tab employees_tab_t, job_history_tab job_history_tab_t,  departments_employees_tab departments_employees_tab_t) cascade; 
 /
 
--- many to many auxiliar table 
-create or replace type departments_employees_t as object ( 
-    departments_tab departments_tab_t,
-    employees_tab employees_tab_t
-); 
-
-
-/
 -- Creating tables 
 create table regions of regions_t
     nested table countries_tab store as r_countries_nt;
@@ -127,7 +125,8 @@ create table locations of locations_t
 / 
 
 create table departments of departments_t 
-    nested table job_history_tab store as d_job_history_nt; 
+    nested table job_history_tab store as d_job_history_nt,
+    nested table departments_employees_tab store as d_departments_employees_nt; 
 / 
 
 create table jobs of jobs_t 
@@ -137,12 +136,8 @@ create table jobs of jobs_t
 
 create table employees of employees_t 
     nested table employees_tab store as employees_nt 
-    nested table job_history_tab store as e_job_history_nt;
-/ 
-
-create table departments_employees of departments_employees_t
-    nested table departments_tab store as de_departments_nt 
-    nested table employees_tab store as de_employees_nt; 
+    nested table job_history_tab store as e_job_history_nt,
+    nested table departments_employees_tab store as e_departments_employees_nt; 
 / 
 
 create table job_history of job_history_t ; 
