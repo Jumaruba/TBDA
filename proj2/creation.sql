@@ -26,7 +26,7 @@ create or replace type regions_t as object (
 
 create or replace type countries_t as object (
     country_id char(2), 
-    region_name varchar2(25),
+    country_name varchar2(25),
     region REF regions_t
 );
 /
@@ -49,10 +49,10 @@ create or replace type employees_t as object (
     phone_number VARCHAR2(20),
     hire_date DATE,
     salary NUMBER(8),
-    comission_pct NUMBER(2),
+    commission_pct NUMBER(2),
     department REF departments_t,
     jobs REF jobs_t,
-    employees REF employees_t
+    manager REF employees_t
 );
 /
 
@@ -65,7 +65,7 @@ create or replace type jobs_t as object (
 /
 
 create or replace type job_history_t as object (
-    star_date DATE,
+    start_date DATE,
     end_date DATE,
     department REF departments_t,
     employee REF employees_t,
@@ -77,7 +77,8 @@ create or replace type departments_t as object (
     department_id NUMBER(4),
     department_name VARCHAR2(30),
     locations REF locations_t,
-    departments_employees REF  departments_employees_t
+    manager REF employees_t,
+    departments_employees REF departments_employees_t
 );
 /
 
@@ -92,7 +93,7 @@ create or replace type departments_tab_t as table of ref departments_t;
 create or replace type job_history_tab_t as table of ref job_history_t; 
 /
 create or replace type employees_tab_t as table of ref employees_t; 
-/
+/ 
 
 -- Add the nested tables.
 alter type regions_t add attribute(countries_tab countries_tab_t) cascade; 
@@ -103,11 +104,13 @@ alter type jobs_t add attribute(job_history_tab job_history_tab_t, employees_tab
 alter type employees_t add attribute(employees_tab employees_tab_t, job_history_tab job_history_tab_t) cascade; 
 
 /
+
 -- many to many auxiliar table 
 create or replace type departments_employees_t as object ( 
     departments_tab departments_tab_t,
     employees_tab employees_tab_t
 ); 
+
 
 /
 -- Creating tables 
@@ -141,3 +144,5 @@ create table departments_employees of departments_employees_t
     nested table departments_tab store as de_departments_nt 
     nested table employees_tab store as de_employees_nt; 
 / 
+
+create table job_history of job_history_t ; 
