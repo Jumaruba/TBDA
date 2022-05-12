@@ -22,7 +22,8 @@ insert into employees (employee_id, first_name, last_name, email,
 select e.employee_id, e.first_name, e.last_name, e.email, 
     e.phone_number, e.hire_date, e.salary, e.commission_pct, ref(j)
 from gtd10.employees e
-inner join jobs j  on j.job_id = e.job_id; 
+inner join jobs j  on j.job_id = e.job_id
+inner join departments d on d.department_id = e.department_id;
 
 
 insert into departments (department_id, department_name, manager, locations)
@@ -37,12 +38,6 @@ from gtd10.job_history jh
 inner join departments d on d.department_id = jh.department_id
 inner join employees e on e.employee_id = jh.employee_id 
 inner join jobs j on j.job_id = jh.job_id; 
-
--- TODO: populate the many to many table. 
-
-insert into departments_employees (departments, employees)
-select ref(d), ref(e)
--- ... 
 
 
 -- Add nested tables 
