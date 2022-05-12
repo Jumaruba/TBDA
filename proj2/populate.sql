@@ -17,7 +17,6 @@ select j.job_id, j.job_title, j.min_salary, j.max_salary
 from gtd10.jobs j; 
 
 
--- Missing the employees reference
 insert into employees (employee_id, first_name, last_name, email, 
     phone_number, hire_date, salary, commission_pct, jobs)
 select e.employee_id, e.first_name, e.last_name, e.email, 
@@ -92,19 +91,31 @@ set d.job_history_tab =
         select ref(jh)
         from job_history jh
         where jh.department.department_id = d.department_id
-    ) as job_history_tab_t);
+    ) as job_history_tab_t),
+d.employees_tab =
+    cast(multiset(
+        select ref(emp)
+        from employees emp
+        where emp.department.department_id = d.department_id
+    ) as employees_tab_t);
 
 update employees e
 set e.job_history_tab =
     cast(multiset(
         select ref(jh)
         from job_history jh
-        where jh.employees.employee_id = e.employee_id 
+        where jh.employee.employee_id = e.employee_id 
     ) as job_history_tab_t),
-e.employees_tab =
+e.responsible_of_emp_tab =
     cast(multiset(
         select ref(emp)
         from employees emp
-        where emp.employee_id = e.employee_id
-    ) as employees_tab_t);
+        where emp.employee_id = e.manager.employee_id
+    ) as employees_tab_t),
+e.manager_of_dep_tab = 
+    cast(multiset(
+        select ref(d)
+        from departments d
+        where d.manager.employee_id = e.employee_id
+    ) as departments_tab_t);
 
