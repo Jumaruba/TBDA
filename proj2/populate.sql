@@ -16,21 +16,28 @@ insert into jobs (job_id, job_title, min_salary, max_salary)
 select j.job_id, j.job_title, j.min_salary, j.max_salary 
 from gtd10.jobs j; 
 
+
 -- Missing the employees reference
 insert into employees (employee_id, first_name, last_name, email, 
     phone_number, hire_date, salary, commission_pct, jobs)
 select e.employee_id, e.first_name, e.last_name, e.email, 
     e.phone_number, e.hire_date, e.salary, e.commission_pct, ref(j)
 from gtd10.employees e
-inner join jobs j  on j.job_id = e.job_id
-inner join departments d on d.department_id = e.department_id;
-
+inner join jobs j  on j.job_id = e.job_id; 
 
 insert into departments (department_id, department_name, manager, locations)
 select d.department_id, d.department_name, ref(e), ref(l) 
 from gtd10.departments d 
 inner join employees e on e.employee_id = d.manager_id
 inner join locations l on l.location_id = d.location_id; 
+
+update employees e 
+set e.department = (
+    select ref(d)
+    from departments d
+    inner join gtd10.employees ge on ge.department_id = d.department_id
+    where ge.employee_id = e.employee_id 
+);
 
 insert into job_history (start_date, end_date, department, employee, jobs) 
 select jh.start_date, jh.end_date, ref(d), ref(e), ref(j)  
@@ -78,6 +85,26 @@ j.employees_tab = cast(multiset(
         where e.jobs.job_id = j.job_id
     ) as employees_tab_t);
 
--- TODO: populate departments 
--- TODO: populate employees
--- TODO: populate job_history
+
+update departments d
+set d.job_history_tab =
+    cast(multiset(
+        select ref(jh)
+        from job_history jh
+        where jh.department.department_id = d.department_id
+    ) as job_history_tab_t);
+
+update employees e
+set e.job_history_tab =
+    cast(multiset(
+        select ref(jh)
+        from job_history jh
+        where jh.employees.employee_id = e.employee_id 
+    ) as job_history_tab_t),
+e.employees_tab =
+    cast(multiset(
+        select ref(emp)
+        from employees emp
+        where emp.employee_id = e.employee_id
+    ) as employees_tab_t);
+
