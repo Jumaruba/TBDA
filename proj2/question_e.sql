@@ -1,0 +1,1 @@
+-- We can get the avarage salary by department and then we can calculate the average by country easily. 
