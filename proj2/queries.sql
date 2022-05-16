@@ -45,38 +45,15 @@ order by salary;
 
 -- QUERY D ======================================================================================
  
-create view employeesMinEndDate as select distinct(jh.employee.employee_id) as employeeId,min(jh.end_date) as endDate 
-from job_history jh 
-group by jh.employee.employee_id;
- 
-create view employeesMaxStartDate as 
-select distinct(jh.employee.employee_id) as employeeId,max(jh.start_date) as startDate 
-from job_history jh 
-group by jh.employee.employee_id; 
 
-select med.employeeId 
-from employeesMinEndDate med 
-inner join employeesMaxStartDate msd on msd.employeeId = med.employeeId 
-where msd.startDate - med.endDate > 1;
+select employee_id, first_name, last_name
+from employees e
+where get_max_history_start_date(employee_id) - get_min_history_end_date(employee_id) > 1;
 
-drop view employeesMinEndDate;
-drop view employeesMaxStartDate;
 
-------------------------------------------------------------------------------
-
-create view employeesWithEndDate as select distinct(jh.employee.employee_id) as employeeId,max(jh.end_date+1) as endDate from job_history jh group by jh.employee.employee_id;   
-
-create view employeesWithoutEndDate as select e.employee_id,e.hire_date from employees e where e.employee_id not in (select employeeId from employeesWithEndDate);
-
-create view employeesJobDuration as select * from employeesWithEndDate union all select * from employeesWithoutEndDate;
-
-select * from employeesJobDuration order by months_between(current_date,endDate) desc;
-
-drop view employeesWithEndDate;
-
-drop view employeesWithoutEndDate;
-
-drop view employeesJobDuration;
+select employee_id, first_name, last_name, e.job_start_date() as work_start_day
+from employees e
+order by months_between(current_date, work_start_day) desc;
 
 
 

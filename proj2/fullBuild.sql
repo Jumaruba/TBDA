@@ -66,8 +66,6 @@ create or replace type departments_t;
 /
 
 
-
-
 create or replace type regions_t as object (
     region_id number,
     region_name varchar2(25)
@@ -127,8 +125,7 @@ create or replace type departments_t as object (
     department_id NUMBER(4),
     department_name VARCHAR2(30),
     locations REF locations_t,
-    manager REF employees_t,
-    member function ever_worked_percentage(department_id number) return number
+    manager REF employees_t
 );
 /
 
