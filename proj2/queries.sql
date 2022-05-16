@@ -1,6 +1,10 @@
 -- QUERY A ======================================================================================
 
+-- First approach (better)
+
 select department_id, department_name, cardinality(employees_tab) as num_employees from departments;
+
+-- Second approach (with null)
 
 
 -- QUERY B ======================================================================================
