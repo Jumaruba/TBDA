@@ -1,0 +1,17 @@
+{
+    "$id": "/schemas/district",
+    "title": "district",
+    "type": "object",
+    "properties": {
+        "cod": {
+            "type": "string",
+            "require": "true",
+            "unique": "true"
+        },
+        "designation": {
+            "type": "string",
+            "require": "true"
+        },
+        "region": { "$ref": "../schemas/region.json" }
+    }
+}

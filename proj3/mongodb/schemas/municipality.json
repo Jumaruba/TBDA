@@ -1,0 +1,17 @@
+{
+    "$id": "/schemas/municipality",
+    "title": "municipality",
+    "type": "object",
+    "properties": {
+        "cod": {
+            "type": "string",
+            "require": "true",
+            "unique": "true"
+        },
+        "designation": {
+            "type": "string",
+            "require": "true"
+        },
+        "district": { "$ref": "../schemas/district.json" }
+    }
+}

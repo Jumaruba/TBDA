@@ -1,0 +1,28 @@
+{
+    "facility": {
+        "id": "",
+        "name": "",
+        "capacity": "",
+        "address": "",
+        "roomtype": {
+            "roomtype": "",
+            "description": ""
+        },
+        "activities": [{
+            "ref": "",
+            "activity": ""
+        }],
+        "municipality": {
+            "cod": "",
+            "designation": "",
+            "district": {
+                "cod": "",
+                "designation": "",
+                "region": {
+                    "designation": "",
+                    "NUT1": ""
+                }
+            }
+        }
+    }
+}

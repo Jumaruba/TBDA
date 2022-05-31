@@ -1,0 +1,19 @@
+{
+    "$id": "/schemas/region",
+    "title": "region",
+    "type": "object",
+    "properties": {
+        "cod": {
+            "type": "string",
+            "require": "true",
+            "unique": "true"
+        },
+        "designation": {
+            "type": "string",
+            "require": "true"
+        },
+        "NUT1": {
+            "enum": ["Continente", "Açores", "Madeira"]
+        }
+    }
+}

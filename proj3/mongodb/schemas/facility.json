@@ -1,0 +1,27 @@
+{
+    "$id": "/schemas/facility",
+    "title": "facility",
+    "type": "object",
+    "properties": {
+        "id": {
+            "type": "ObjectId"
+        },
+        "name": {
+            "type": "string",
+            "require": "true"
+        },
+        "capacity": {
+            "type": "integer",
+            "require": "true"
+        },
+        "address": {
+            "type": "string",
+            "require": "true"
+        },
+        "roomtype": { "$ref": "../schemas/roomtype.json" },
+        "municipality": { "$ref": "../schemas/municipality.json" },
+        "activities": [
+            { "$ref": "../schemas/activity.json" }
+        ]
+    }
+}
