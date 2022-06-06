@@ -1,5 +1,5 @@
-
--- Populate the regions. 
+// POPULATE ==================================================
+// Regions
 
 load csv with headers from 'file:///regions.csv' as line 
 create (region: Region {
@@ -8,7 +8,7 @@ create (region: Region {
     nut1: line.nut1})
 return region; 
 
--- Populate districts.
+// Districts
 
 load csv with headers from 'file:///districts.csv' as line
 create (d: District {
@@ -18,10 +18,10 @@ create (d: District {
 })
 return d;
 
--- Populate municipalities. 
+// Municipalities
 
 load csv with headers from 'file:///municipalities.csv' as line
-create (m: Municipalities {
+create (m: Municipality {
     cod: line.cod,
     designation: line.designation,
     region: line.region,
@@ -29,10 +29,10 @@ create (m: Municipalities {
 })
 return m;
 
--- Populate facilities. 
+// Facilities
 
 load csv with headers from 'file:///facilities.csv' as line
-create (f: Facilities{
+create (f: Facility{
     id: line.id,
     name: line.name,
     capacity: line.capacity,
@@ -42,7 +42,7 @@ create (f: Facilities{
 })
 return f;
 
--- Populate roomtype.
+// Roomtype
 
 load csv with headers from 'file:///roomtypes.csv' as line
 create (r: Roomtype{
@@ -51,14 +51,23 @@ create (r: Roomtype{
 })
 return r;
 
--- Populate activities.
+// Activities
 
 load csv with headers from 'file:///activities.csv' as line
-create (a: Activities{
+create (a: Activity{
     ref: line.ref,
     activity: line.activity
 })
 return a;
 
 
+// RELATIONS =======================================================
 
+load csv with headers from 'file:///uses.csv' as line
+match 
+    (a: Acitvity),
+    (f: Facility)
+    where line.id = f.id and line.ref = a.ref
+    create (a)-[u:USES]->(f)
+    return type(u);
+    
