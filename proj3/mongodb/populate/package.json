@@ -1,0 +1,15 @@
+{
+  "name": "populate",
+  "version": "1.0.0",
+  "description": "",
+  "main": "populate_mongodb.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node populate_mongodb.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "mongodb": "^3.6.0"
+  }
+}

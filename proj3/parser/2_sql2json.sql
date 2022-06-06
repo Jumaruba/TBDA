@@ -73,10 +73,12 @@ begin
 end get_municipalities;
 
 /
-select json_object( '_id'               value cod,
-                    'designation'       value designation,
-                    'municipalities'    value get_municipalities(cod)
-                     format json returning clob)
+select json_arrayagg(
+    json_object( 
+        '_id'               value cod,
+        'designation'       value designation,
+        'municipalities'    value get_municipalities(cod) format json returning clob)   
+    format json returning clob)
 from districts;
 
     
@@ -85,7 +87,6 @@ from districts;
     
     
     
-
 
     
     
