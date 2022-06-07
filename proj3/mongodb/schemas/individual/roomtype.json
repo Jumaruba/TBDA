@@ -1,0 +1,14 @@
+{
+    "$id": "/schemas/roomtype",
+    "title": "roomtype",
+    "type": "object",
+    "properties": {
+        "roomtype": {
+            "type": "ObjectId"
+        },
+        "description": {
+            "type": "string",
+            "require": "true"
+        }
+    }
+}

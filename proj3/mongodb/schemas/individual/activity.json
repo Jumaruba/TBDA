@@ -1,0 +1,14 @@
+{
+    "$id": "/schemas/activity",
+    "title": "activity",
+    "type": "object",
+    "properties": {
+        "ref": {
+            "type": "ObjectId"
+        },
+        "activity": {
+            "type": "string",
+            "require": "true"
+        }
+    }
+}
