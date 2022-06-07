@@ -14,7 +14,7 @@ load csv with headers from 'file:///districts.csv' as line
 create (d: District {
     cod: toInteger(line.COD),
     designation: line.DESIGNATION,
-    region: line.REGION
+    region: toInteger(line.REGION)
 })
 return d;
 
@@ -24,8 +24,8 @@ load csv with headers from 'file:///municipalities.csv' as line
 create (m: Municipality {
     cod: toInteger(line.COD),
     designation: line.DESIGNATION,
-    region: line.REGION,
-    district: line.DISTRICT
+    region: toInteger(line.REGION),
+    district: toInteger(line.DISTRICT)
 })
 return m;
 
@@ -38,7 +38,7 @@ create (f: Facility{
     capacity: line.CAPACITY,
     roomtype: line.ROOMTYPE,
     address: line.ADDRESS,
-    municipality: line.MUNICIPALITY
+    municipality: toInteger(line.MUNICIPALITY)
 })
 return f;
 
@@ -68,7 +68,8 @@ return a;
 load csv with headers from 'file:///uses.csv' as line
 match (a: Activity {ref: line.REF})
 match (f: Facility {id: line.ID})
-merge (a)-[:USES]->(f);
+// merge (a)-[:USES]->(f);
+merge (f)-[:HAS]->(a); 
 
 // Add roomtype to facilities directly ----
 
@@ -87,10 +88,11 @@ merge (f)-[:LOCATED_AT]->(m);
 
 // Municipality-BELONGS_TO->District 
 match (m: Municipality)
-match (d:District {cod: m.district})
+match (d: District {cod: m.district})
 merge (m)-[:BELONGS_TO]->(d); 
 
 // Municipality-INSIDE_A->Region 
 match (m: Municipality)
 match (r:Region {cod: m.region})
 merge (m)-[:INSIDE_A]->(r); 
+
