@@ -1,2 +1,2 @@
-match (a) -[r] -> () delete a, r 
-match (a) delete a 
+match (a) -[r] -> () delete a, r;
+match (a) delete a ;
