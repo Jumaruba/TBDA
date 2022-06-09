@@ -14,8 +14,8 @@ db.cultural_facilities.aggregate({"$unwind": "$municipalities"},{"$unwind": "$mu
 
 --QUESTION C--
 
-count = db.cultural_facilities.aggregate({"$unwind": "$municipalities"},{"$unwind": "$municipalities.facilities"}, {$match : { "municipalities.facilities.activities": { "$nin": ["cinema"] } }},{
-$count: "municipalities with facilities with no cinema"})
+count = db.cultural_facilities.aggregate({"$unwind": "$municipalities"},{$match : { "municipalities.facilities.activities": { "$nin": ["cinema"] } }},
+{$count: "municipalities with facilities with no cinema"})
 
 -- QUESTION D -- 
 -- Considers that more than one municipality can have the biggest number of a certain activity. 
