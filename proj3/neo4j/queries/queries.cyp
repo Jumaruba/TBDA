@@ -3,7 +3,7 @@
 
 match(f:Facility)-[:HAS]->(a:Activity)
 where f.roomtype contains 'touros' and a.activity = 'teatro'
-return f.id, f.name, f.description, a.activity;
+return f.id, f.name, f.roomtype as description, a.activity;
 
 
 // b) How many facilities with 'touros' in the room type description are there in each region? 

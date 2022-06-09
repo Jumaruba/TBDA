@@ -5,12 +5,20 @@ db.cultural_facilities.aggregate(
     {"$unwind": "$municipalities.facilities"}, 
     {"$match":{"municipalities.facilities.roomtype":/touros/,
     "municipalities.facilities.activities":"teatro"}},
-    {"$project":{"municipalities.facilities._id":1,"municipalities.facilities.name":1,"municipalities.facilities.activities":1,"_id":0}})
+    {"$project":{
+        "Facility_id": "$municipalities.facilities._id",
+        "Facility_name": "$municipalities.facilities.name",
+        "Activities": "$municipalities.facilities.activities",
+        "Roomtype": "$municipalities.facilities.roomtype",
+        "_id":0}})
 
 --QUESTION B--
 
-db.cultural_facilities.aggregate({"$unwind": "$municipalities"},{"$unwind": "$municipalities.facilities"}, {"$match":{"municipalities.facilities.roomtype":/touros/}},
-{$group : {_id:"$municipalities.region", count:{$sum:1}}})
+db.cultural_facilities.aggregate(
+    {"$unwind": "$municipalities"},
+    {"$unwind": "$municipalities.facilities"}, 
+    {"$match":{"municipalities.facilities.roomtype":/touros/}},
+    {$group : {_id:"$municipalities.region", count:{$sum:1}}})
 
 
 -- QUESTION D -- 
@@ -28,13 +36,10 @@ db.cultural_facilities.aggregate({"$unwind": "$municipalities"},{"$unwind": "$mu
       "facilities": {"$filter": {
         input: "$docs",
         as: "element",
-        cond: {
-            if: {$eq: ["$$element.numTimes", "$maxTimes"]},
-            then: "$docs.municipality",
-            else: "vrau"
+        cond: {$eq: ["$$element.numTimes", "$maxTimes"]}
         }
       }
-    }}},
+    }},
   ])
 
 -- Considers that just one municipality can have the biggest number of a certain activity.
