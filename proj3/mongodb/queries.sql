@@ -1,3 +1,7 @@
+
+
+
+
 --QUESTION A--
 
 db.cultural_facilities.aggregate(
@@ -6,8 +10,8 @@ db.cultural_facilities.aggregate(
     {"$match":{"municipalities.facilities.roomtype":/touros/,
     "municipalities.facilities.activities":"teatro"}},
     {"$project":{
-        "Facility_id": "$municipalities.facilities._id",
-        "Facility_name": "$municipalities.facilities.name",
+        "FacilityId": "$municipalities.facilities._id",
+        "FacilityName": "$municipalities.facilities.name",
         "Activities": "$municipalities.facilities.activities",
         "Roomtype": "$municipalities.facilities.roomtype",
         "_id":0}})
@@ -15,15 +19,24 @@ db.cultural_facilities.aggregate(
 --QUESTION B--
 
 db.cultural_facilities.aggregate(
-    {"$unwind": "$municipalities"},
-    {"$unwind": "$municipalities.facilities"}, 
-    {"$match":{"municipalities.facilities.roomtype":/touros/}},
-    {$group : {_id:"$municipalities.region", count:{$sum:1}}})
+    {$unwind: "$municipalities"},
+    {$unwind: "$municipalities.facilities"}, 
+    {$match:{"municipalities.facilities.roomtype":/touros/}},
+    {$group : {_id:"$municipalities.region", count:{$sum:1}}},
+    {$project: {
+        _id: 0,
+        "Region": "$_id.designation",
+        "NumFacilties": "$count"
+    }})
 
 --QUESTION C--
 
-count = db.cultural_facilities.aggregate({"$unwind": "$municipalities"},{"$unwind": "$municipalities.facilities"}, {$match : { "municipalities.facilities.activities": { "$nin": ["cinema"] } }},{
-$count: "municipalities with facilities with no cinema"})
+db.cultural_facilities.aggregate(
+  {"$unwind": "$municipalities"},
+  {"$unwind": "$municipalities.facilities"}, 
+  {$match : { "municipalities.facilities.activities": { "$nin": ["cinema"] } }},
+  {$count: "municipalities with facilities with no cinema"})
+
 
 -- QUESTION D -- 
 -- Considers that more than one municipality can have the biggest number of a certain activity. 
