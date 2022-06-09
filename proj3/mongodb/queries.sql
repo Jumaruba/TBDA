@@ -11,3 +11,8 @@ db.cultural_facilities.aggregate(
 
 db.cultural_facilities.aggregate({"$unwind": "$municipalities"},{"$unwind": "$municipalities.facilities"}, {"$match":{"municipalities.facilities.roomtype":/touros/}},
 {$group : {_id:"$municipalities.region", count:{$sum:1}}})
+
+--QUESTION C--
+
+count = db.cultural_facilities.aggregate({"$unwind": "$municipalities"},{"$unwind": "$municipalities.facilities"}, {$match : { "municipalities.facilities.activities": { "$nin": ["cinema"] } }},{
+$count: "municipalities with facilities with no cinema"})
