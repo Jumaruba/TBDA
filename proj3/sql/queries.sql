@@ -41,7 +41,7 @@ inner join municipalities m on f.municipality = m.cod
 where a.activity = 'cinema') c
 group by c.has_cinema;
 
--- QUESTION E - 
+-- QUESTION D - 
 
 create view max_counter_activity as (
 select max(counter) as counter, activity
@@ -67,5 +67,4 @@ select m.counter, m.activity, c.designation
 from max_counter_activity m 
 inner join counts c on m.activity = c.activity and m.counter = c.counter
 order by counter desc;
-    
     
