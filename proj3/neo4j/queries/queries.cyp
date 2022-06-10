@@ -14,9 +14,10 @@ return r.designation as Region, count(f) as Num_of_facilities;
 
 
 // c) How many activities do not have any facility with an activity of 'cinema'? 
-match (f:Facility)-[:HAS]->(a:Activity)
-where a.activity=~ 'cinema'
-return count(f);
+match (m:Municipality)
+match  (m1:Municipality)<-[:LOCATED_AT]-(f:Facility)-[:HAS]->(:Activity {activity: "cinema"})
+with count(distinct m1) as non_cinema_count, count(distinct m) as total_count
+return total_count - non_cinema_count;
 
 // d) 
 
