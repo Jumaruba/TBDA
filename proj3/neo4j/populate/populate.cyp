@@ -1,7 +1,7 @@
 // POPULATE ==================================================
 // Regions
 
-load csv with headers from 'file:///regions.csv' as line 
+load csv with headers from 'file:///regions.csv' as line FIELDTERMINATOR ';'
 create (region: Region {
     cod: toInteger(line.COD),
     designation: line.DESIGNATION,
@@ -10,7 +10,7 @@ return region;
 
 // Districts
 
-load csv with headers from 'file:///districts.csv' as line
+load csv with headers from 'file:///districts.csv' as line FIELDTERMINATOR ';'
 create (d: District {
     cod: toInteger(line.COD),
     designation: line.DESIGNATION,
@@ -20,7 +20,7 @@ return d;
 
 // Municipalities
 
-load csv with headers from 'file:///municipalities.csv' as line
+load csv with headers from 'file:///municipalities.csv' as line  FIELDTERMINATOR ';'
 create (m: Municipality {
     cod: toInteger(line.COD),
     designation: line.DESIGNATION,
@@ -31,7 +31,7 @@ return m;
 
 // Facilities
 
-load csv with headers from 'file:///facilities.csv' as line
+load csv with headers from 'file:///facilities.csv' as line FIELDTERMINATOR ';'
 create (f: Facility{
     id:line.ID,
     name: line.NAME,
@@ -44,7 +44,7 @@ return f;
 
 // Roomtype
 
-load csv with headers from 'file:///roomtypes.csv' as line
+load csv with headers from 'file:///roomtypes.csv' as line FIELDTERMINATOR ';'
 create (r: Roomtype{
     roomtype: line.ROOMTYPE,
     description: line.DESCRIPTION
@@ -53,7 +53,7 @@ return r;
 
 // Activities
 
-load csv with headers from 'file:///activities.csv' as line
+load csv with headers from 'file:///activities.csv' as line FIELDTERMINATOR ';'
 create (a: Activity{
     ref: line.REF,
     activity: line.ACTIVITY
@@ -65,7 +65,7 @@ return a;
 
 // Acitvity-USES->Facility ----
 
-load csv with headers from 'file:///uses.csv' as line
+load csv with headers from 'file:///uses.csv' as line 
 match (a: Activity {ref: line.REF})
 match (f: Facility {id: line.ID})
 // merge (a)-[:USES]->(f);
