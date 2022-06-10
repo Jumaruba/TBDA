@@ -40,3 +40,32 @@ inner join activities a on u.ref = a.ref
 inner join municipalities m on f.municipality = m.cod
 where a.activity = 'cinema') c
 group by c.has_cinema;
+
+-- QUESTION E - 
+
+create view max_counter_activity as (
+select max(counter) as counter, activity
+from (
+    select count(a.ref) as counter, a.activity as activity, m.designation as designation
+    from facilities f 
+    inner join uses u on u.id = f.id 
+    inner join activities a on a.ref = u.ref
+    inner join municipalities m on m.cod = f.municipality
+    group by a.activity, m.designation
+)
+group by activity);
+
+create view counts as (
+select count(a.ref) as counter, a.activity as activity, m.designation as designation
+from facilities f 
+inner join uses u on u.id = f.id 
+inner join activities a on a.ref = u.ref
+inner join municipalities m on m.cod = f.municipality
+group by a.activity, m.designation);
+
+select m.counter, m.activity, c.designation
+from max_counter_activity m 
+inner join counts c on m.activity = c.activity and m.counter = c.counter
+order by counter desc;
+    
+    
