@@ -65,7 +65,7 @@ return a;
 
 // Acitvity-USES->Facility ----
 
-load csv with headers from 'file:///uses.csv' as line 
+load csv with headers from 'file:///uses.csv' as line  FIELDTERMINATOR ';'
 match (a: Activity {ref: line.REF})
 match (f: Facility {id: line.ID})
 // merge (a)-[:USES]->(f);
