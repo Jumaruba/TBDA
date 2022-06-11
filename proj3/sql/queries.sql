@@ -67,4 +67,19 @@ select m.counter, m.activity, c.designation
 from max_counter_activity m 
 inner join counts c on m.activity = c.activity and m.counter = c.counter
 order by counter desc;
+
+-- QUESTION E --
+
+select cod,district from municipalities;
+select * from facilities;
+
+create view districtsWithNoFacilities as select cod,district from municipalities where not exists(select municipality from facilities where facilities.municipality = municipalities.cod);
+
+select cod,designation from districts where cod in (select distinct district
+from municipalities m
+where not exists (
+    select cod 
+    from districtsWithNoFacilities df
+    where df.district = m.district
+));
     
