@@ -21,7 +21,9 @@ return count(f);
 // d) 
 
 
-// e) 
+// e) Which are the codes and designations of the districts with facilities in all the municipalities?
+MATCH (m:Municipality) WHERE  NOT ()-[:LOCATED_AT]->(m) WITH collect(m) as mun
+MATCH (m:Municipality)-[:BELONGS_TO]->(d:District) WHERE ALL(x IN mun WHERE NOT (x)--(d)) 
+WITH DISTINCT d RETURN d.cod, d.designation 
 
-
-// f)
+// f) 
