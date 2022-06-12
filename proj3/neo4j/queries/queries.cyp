@@ -19,13 +19,12 @@ match  (m1:Municipality)<-[:LOCATED_AT]-(f:Facility)-[:HAS]->(:Activity {activit
 with count(distinct m1) as non_cinema_count, count(distinct m) as total_count
 return total_count - non_cinema_count;
 
-// d) 
-MATCH (m:Municipality)<-[:LOCATED_AT]-(f:Facility)-[:HAS]->(a:Activity) 
-with a.activity as act, m.designation as mun, count(f) as cnt 
-with  act, collect(mun) as muns, collect(cnt) as cnts 
-MATCH (m1:Municipality)<-[:LOCATED_AT]-(f1:Facility)-[:HAS]->(a:Activity) 
-with a.activity as act1, m1.designation as mun1, count(f1) as ctn1, act, cnts
-WHERE ctn1=apoc.coll.max(cnts) return act, collect(mun1), apoc.coll.max(cnts) as num_facilities
+// d) d. Which is the municipality with more facilities engaged in each of the six kinds of activities? 
+//Show the activity, the municipality name and the corresponding number of facilities
+MATCH (a:Activity)<-[:HAS]-(f:Facility)-[:LOCATED_AT]->(m:Municipality) with a,m,count(f) as num_fac
+WITH a, collect(m) as mun, collect(num_fac) as facs WITH a, mun, facs,
+reduce(x=[0,0], idx in range(0,size(facs)-1) | case when facs[idx] > x[1] then [idx,facs[idx]] else x end)[0] as index
+return a.activity AS Activity, mun[index].designation AS Municipality, facs[index] As num ORDER BY Activity
 
 
 // e) Which are the codes and designations of the districts with facilities in all the municipalities?
@@ -35,5 +34,5 @@ WITH DISTINCT d RETURN d.cod, d.designation
 
 // f) Which are the average facilities capacity in each district?
 MATCH (f:Facility)-[:LOCATED_AT]->(m:Municipality)-[:BELONGS_TO]->(d:District)
-WITH d.designation as Distrito, round(apoc.coll.avg(collect(f.capacity))) as Capacidade_Media 
+WITH d.designation as Distrito, round(apoc.coll.avg(collect(f.capacity)), 2) as Capacidade_Media 
 RETURN Distrito, Capacidade_Media
