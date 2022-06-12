@@ -81,3 +81,17 @@ db.cultural_facilities.aggregate([
   }}
 ])
 
+
+-- QUESTiON F -- Which are the average facilities capacity in each district?
+
+db.cultural_facilities.aggregate([
+  {$unwind: "$municipalities"},
+  {$unwind: "$municipalities.facilities"},
+  {$project:{"
+  facilities": {"$avg": {
+        input: "$docs",
+        as: "element",
+        cond: {$eq: ["$$element.numTimes", "$maxTimes"]}
+        }}
+  }}
+])

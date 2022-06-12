@@ -35,7 +35,7 @@ load csv with headers from 'file:///facilities.csv' as line FIELDTERMINATOR ';'
 create (f: Facility{
     id:line.ID,
     name: line.NAME,
-    capacity: line.CAPACITY,
+    capacity: toInteger(line.CAPACITY),
     roomtype: line.ROOMTYPE,
     address: line.ADDRESS,
     municipality: toInteger(line.MUNICIPALITY)
