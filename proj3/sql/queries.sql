@@ -82,4 +82,16 @@ where not exists (
     from districtsWithNoFacilities df
     where df.district = m.district
 ));
+
+-- QUESTION F --
+
+select * from facilities;
+select * from municipalities;
+
+create view facilitiesByDistrict as select f.name,f.capacity,m.district
+FROM facilities f
+INNER JOIN municipalities m
+ON f.municipality = m.cod;
+
+select d.designation,f.district,round(avg(f.capacity),2) from facilitiesByDistrict f, districts d where d.cod=f.district group by f.district,d.designation;
     
