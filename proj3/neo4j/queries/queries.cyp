@@ -20,6 +20,12 @@ with count(distinct m1) as non_cinema_count, count(distinct m) as total_count
 return total_count - non_cinema_count;
 
 // d) 
+MATCH (m:Municipality)<-[:LOCATED_AT]-(f:Facility)-[:HAS]->(a:Activity) 
+with a.activity as act, m.designation as mun, count(f) as cnt 
+with  act, collect(mun) as muns, collect(cnt) as cnts 
+MATCH (m1:Municipality)<-[:LOCATED_AT]-(f1:Facility)-[:HAS]->(a:Activity) 
+with a.activity as act1, m1.designation as mun1, count(f1) as ctn1, act, cnts
+WHERE ctn1=apoc.coll.max(cnts) return act, collect(mun1), apoc.coll.max(cnts) as num_facilities
 
 
 // e) Which are the codes and designations of the districts with facilities in all the municipalities?
