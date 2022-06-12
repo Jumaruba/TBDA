@@ -27,4 +27,7 @@ MATCH (m:Municipality) WHERE  NOT ()-[:LOCATED_AT]->(m) WITH collect(m) as mun
 MATCH (m:Municipality)-[:BELONGS_TO]->(d:District) WHERE ALL(x IN mun WHERE NOT (x)--(d)) 
 WITH DISTINCT d RETURN d.cod, d.designation 
 
-// f) 
+// f) Which are the average facilities capacity in each district?
+MATCH (f:Facility)-[:LOCATED_AT]->(m:Municipality)-[:BELONGS_TO]->(d:District)
+WITH d.designation as Distrito, round(apoc.coll.avg(collect(f.capacity))) as Capacidade_Media 
+RETURN Distrito, Capacidade_Media
