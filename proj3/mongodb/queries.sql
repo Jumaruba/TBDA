@@ -73,7 +73,7 @@ count = db.cultural_facilities.aggregate(
 -- QUESTION E -- 
 
 db.cultural_facilities.aggregate([
-  {"$match": {"municipalities.facilities": {$ne: "null"}}},
+  {"$match": {"municipalities.facilities": {$ne: null}}},
   {"$project":{
     _id: 0,
     code: "$_id",
@@ -84,14 +84,15 @@ db.cultural_facilities.aggregate([
 
 -- QUESTiON F -- Which are the average facilities capacity in each district?
 
-db.cultural_facilities.aggregate([
-  {$unwind: "$municipalities"},
-  {$unwind: "$municipalities.facilities"},
-  {$project:{"
-  facilities": {"$avg": {
-        input: "$docs",
-        as: "element",
-        cond: {$eq: ["$$element.numTimes", "$maxTimes"]}
-        }}
-  }}
-])
+db.getCollection("cultural_facilities").aggregate(
+   [
+   {$unwind: "$municipalities"},
+   {$unwind: "$municipalities.facilities"},
+   {$group:{_id: {"cod": "$_id", "designation": "$designation"}, avgCapacity: {$avg: "$municipalities.facilities.capacity" }}},
+   {$project: {
+      "_id": "$_id.cod", 
+      "district": "$_id.designation",
+      "avgCapacity": "$avgCapacity"
+   }}
+   ]
+)

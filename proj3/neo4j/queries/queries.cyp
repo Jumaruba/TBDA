@@ -19,7 +19,7 @@ match  (m1:Municipality)<-[:LOCATED_AT]-(f:Facility)-[:HAS]->(:Activity {activit
 with count(distinct m1) as non_cinema_count, count(distinct m) as total_count
 return total_count - non_cinema_count;
 
-// d) d. Which is the municipality with more facilities engaged in each of the six kinds of activities? 
+// d) Which is the municipality with more facilities engaged in each of the six kinds of activities? 
 //Show the activity, the municipality name and the corresponding number of facilities
 MATCH (a:Activity)<-[:HAS]-(f:Facility)-[:LOCATED_AT]->(m:Municipality) with a,m,count(f) as num_fac
 WITH a, collect(m) as mun, collect(num_fac) as facs WITH a, mun, facs,
